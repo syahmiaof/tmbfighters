@@ -125,13 +125,43 @@ export async function registrationPage() {
               </div>
             </div>
             <div class="contact-list">
+              <a class="contact-item" href="https://wa.me/60139326767" target="_blank" rel="noopener noreferrer">
+                <span class="contact-wa-badge" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2m.01 1.67c4.54 0 8.24 3.7 8.24 8.24 0 2.2-.86 4.28-2.42 5.83a8.17 8.17 0 0 1-5.82 2.41c-1.42 0-2.82-.37-4.06-1.1l-.29-.17-3.02.79.81-2.94-.19-.3a8.19 8.19 0 0 1-1.26-4.47c0-4.54 3.7-8.24 8.24-8.24m-3.56 4.76c-.2 0-.51.07-.78.37-.27.29-1.02 1-1.02 2.43 0 1.44 1.05 2.82 1.2 3.01.15.2 2.05 3.14 4.98 4.4 2.43 1.05 2.92.84 3.45.79.53-.05 1.7-.69 1.94-1.36.24-.67.24-1.24.17-1.36-.07-.12-.27-.2-.56-.35-.3-.15-1.7-.84-1.97-.94-.26-.09-.46-.15-.65.15-.2.29-.76.94-.93 1.13-.17.2-.35.22-.64.07-.3-.15-1.26-.46-2.39-1.47-.88-.79-1.48-1.76-1.65-2.06-.17-.29-.02-.45.13-.6.13-.13.3-.35.44-.52.15-.17.2-.29.3-.49.09-.2.05-.37-.02-.52-.08-.15-.65-1.57-.9-2.15-.24-.56-.49-.49-.67-.5"/></svg>
+                </span>
+                <div class="contact-info">
+                  <span class="contact-name">Pn Azila</span>
+                  <span class="contact-phone">013-932 6767</span>
+                </div>
+                <span class="contact-arrow" aria-hidden="true">↗</span>
+              </a>
+              <a class="contact-item" href="https://wa.me/601110894945" target="_blank" rel="noopener noreferrer">
+                <span class="contact-wa-badge" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2m.01 1.67c4.54 0 8.24 3.7 8.24 8.24 0 2.2-.86 4.28-2.42 5.83a8.17 8.17 0 0 1-5.82 2.41c-1.42 0-2.82-.37-4.06-1.1l-.29-.17-3.02.79.81-2.94-.19-.3a8.19 8.19 0 0 1-1.26-4.47c0-4.54 3.7-8.24 8.24-8.24m-3.56 4.76c-.2 0-.51.07-.78.37-.27.29-1.02 1-1.02 2.43 0 1.44 1.05 2.82 1.2 3.01.15.2 2.05 3.14 4.98 4.4 2.43 1.05 2.92.84 3.45.79.53-.05 1.7-.69 1.94-1.36.24-.67.24-1.24.17-1.36-.07-.12-.27-.2-.56-.35-.3-.15-1.7-.84-1.97-.94-.26-.09-.46-.15-.65.15-.2.29-.76.94-.93 1.13-.17.2-.35.22-.64.07-.3-.15-1.26-.46-2.39-1.47-.88-.79-1.48-1.76-1.65-2.06-.17-.29-.02-.45.13-.6.13-.13.3-.35.44-.52.15-.17.2-.29.3-.49.09-.2.05-.37-.02-.52-.08-.15-.65-1.57-.9-2.15-.24-.56-.49-.49-.67-.5"/></svg>
+                </span>
+                <div class="contact-info">
+                  <span class="contact-name">En Fadhil</span>
+                  <span class="contact-phone">011-1089 4945</span>
+                </div>
+                <span class="contact-arrow" aria-hidden="true">↗</span>
+              </a>
               <a class="contact-item" href="https://wa.me/60107965236" target="_blank" rel="noopener noreferrer">
                 <span class="contact-wa-badge" aria-hidden="true">
                   <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2m.01 1.67c4.54 0 8.24 3.7 8.24 8.24 0 2.2-.86 4.28-2.42 5.83a8.17 8.17 0 0 1-5.82 2.41c-1.42 0-2.82-.37-4.06-1.1l-.29-.17-3.02.79.81-2.94-.19-.3a8.19 8.19 0 0 1-1.26-4.47c0-4.54 3.7-8.24 8.24-8.24m-3.56 4.76c-.2 0-.51.07-.78.37-.27.29-1.02 1-1.02 2.43 0 1.44 1.05 2.82 1.2 3.01.15.2 2.05 3.14 4.98 4.4 2.43 1.05 2.92.84 3.45.79.53-.05 1.7-.69 1.94-1.36.24-.67.24-1.24.17-1.36-.07-.12-.27-.2-.56-.35-.3-.15-1.7-.84-1.97-.94-.26-.09-.46-.15-.65.15-.2.29-.76.94-.93 1.13-.17.2-.35.22-.64.07-.3-.15-1.26-.46-2.39-1.47-.88-.79-1.48-1.76-1.65-2.06-.17-.29-.02-.45.13-.6.13-.13.3-.35.44-.52.15-.17.2-.29.3-.49.09-.2.05-.37-.02-.52-.08-.15-.65-1.57-.9-2.15-.24-.56-.49-.49-.67-.5"/></svg>
                 </span>
                 <div class="contact-info">
-                  <span class="contact-name">Syahmi</span>
+                  <span class="contact-name">Coach Syahmi (Jurulatih Bertauliah)</span>
                   <span class="contact-phone">010-796 5236</span>
+                </div>
+                <span class="contact-arrow" aria-hidden="true">↗</span>
+              </a>
+              <a class="contact-item" href="https://wa.me/601120812650" target="_blank" rel="noopener noreferrer">
+                <span class="contact-wa-badge" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2m.01 1.67c4.54 0 8.24 3.7 8.24 8.24 0 2.2-.86 4.28-2.42 5.83a8.17 8.17 0 0 1-5.82 2.41c-1.42 0-2.82-.37-4.06-1.1l-.29-.17-3.02.79.81-2.94-.19-.3a8.19 8.19 0 0 1-1.26-4.47c0-4.54 3.7-8.24 8.24-8.24m-3.56 4.76c-.2 0-.51.07-.78.37-.27.29-1.02 1-1.02 2.43 0 1.44 1.05 2.82 1.2 3.01.15.2 2.05 3.14 4.98 4.4 2.43 1.05 2.92.84 3.45.79.53-.05 1.7-.69 1.94-1.36.24-.67.24-1.24.17-1.36-.07-.12-.27-.2-.56-.35-.3-.15-1.7-.84-1.97-.94-.26-.09-.46-.15-.65.15-.2.29-.76.94-.93 1.13-.17.2-.35.22-.64.07-.3-.15-1.26-.46-2.39-1.47-.88-.79-1.48-1.76-1.65-2.06-.17-.29-.02-.45.13-.6.13-.13.3-.35.44-.52.15-.17.2-.29.3-.49.09-.2.05-.37-.02-.52-.08-.15-.65-1.57-.9-2.15-.24-.56-.49-.49-.67-.5"/></svg>
+                </span>
+                <div class="contact-info">
+                  <span class="contact-name">Hud</span>
+                  <span class="contact-phone">011-2081 2650</span>
                 </div>
                 <span class="contact-arrow" aria-hidden="true">↗</span>
               </a>
@@ -1161,15 +1191,16 @@ async function adminPage(session) {
                 <th>No. Matrik</th>
                 <th>No. IC</th>
                 <th>Program</th>
+                <th>Email</th>
                 <th>Jantina</th>
                 <th>Pengalaman</th>
                 <th>Telefon / WhatsApp</th>
                 <th>Status</th>
-                <th style="text-align: right; min-width: 140px;">Tindakan</th>
+                <th style="text-align: right; min-width: 260px;">Tindakan</th>
               </tr>
             </thead>
             <tbody id="registration-rows">
-              <tr><td colspan="9" style="text-align:center; padding: 30px;">Memuatkan pangkalan data...</td></tr>
+              <tr><td colspan="10" style="text-align:center; padding: 30px;">Memuatkan pangkalan data...</td></tr>
             </tbody>
           </table>
           <div id="empty-state" class="empty-state" hidden>Tiada rekod sepadan. Cuba ubah carian atau tapisan.</div>
@@ -1247,7 +1278,7 @@ async function adminPage(session) {
     const status = (statusSelect?.value || '').trim().toLowerCase();
 
     const shown = members.filter(row => {
-      const searchTarget = `${row.full_name || ''} ${row.program || ''} ${row.matric_number || ''} ${row.member_id || ''} ${row.ic_number || ''}`.toLowerCase();
+      const searchTarget = `${row.full_name || ''} ${row.program || ''} ${row.matric_number || ''} ${row.member_id || ''} ${row.ic_number || ''} ${row.email || ''}`.toLowerCase();
       const parsed = parseProgramDetails(row.program);
 
       const matchesQuery = !query || searchTarget.includes(query);
@@ -1282,6 +1313,7 @@ async function adminPage(session) {
             .slice(-1)[0]
             ?.slice(-2)
             .toUpperCase() || 'A';
+        const isDiterima = row.status === 'Diterima';
         return `
         <tr>
           <td>
@@ -1293,16 +1325,17 @@ async function adminPage(session) {
           <td><span style="font-family: monospace; font-weight: 700;">${matric}</span></td>
           <td><span style="font-family: monospace; color: #bbb;">${row.ic_number || '—'}</span></td>
           <td>${row.program || '—'}</td>
+          <td><a class="table-email-link" href="mailto:${row.email || ''}" title="${row.email || 'Tiada email'}">${row.email || '—'}</a></td>
           <td>${row.gender || '—'}</td>
           <td><span class="experience-tag ${row.experience === 'Ada' ? 'yes' : ''}">${row.experience || '—'}</span></td>
           <td><a class="whatsapp-link" href="${whatsappUrl(row.phone)}" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp ${row.full_name}"><span aria-hidden="true">◉</span>${row.phone || '—'}</a></td>
-          <td><span class="status-tag ${row.status === 'Diterima' ? 'accepted' : 'review'}">${row.status || 'Semakan'}</span></td>
+          <td><span class="status-tag ${isDiterima ? 'accepted' : 'review'}">${row.status || 'Semakan'}</span></td>
           <td>
             <div class="action-btns-group">
-              <button class="action-btn action-btn-status" data-action="toggle-status" data-id="${row.id}" type="button" title="Tukar status (${row.status === 'Diterima' ? 'Ubah ke Semakan' : 'Ubah ke Diterima'})">⚡</button>
-              <button class="action-btn action-btn-edit" data-action="edit" data-id="${row.id}" type="button" title="Edit maklumat">✏️</button>
-              <button class="action-btn action-btn-view" data-action="view" data-id="${row.id}" type="button" title="Lihat butiran">👁️</button>
-              <button class="action-btn action-btn-delete" data-action="delete" data-id="${row.id}" type="button" title="Padam rekod">🗑️</button>
+              <button class="action-btn action-btn-status ${isDiterima ? 'is-accepted' : 'is-review'}" data-action="toggle-status" data-id="${row.id}" type="button" title="${isDiterima ? 'Ubah status ke Semakan' : 'Sahkan pendaftaran peserta'}">${isDiterima ? 'Semakan' : 'Sahkan'}</button>
+              <button class="action-btn action-btn-edit" data-action="edit" data-id="${row.id}" type="button" title="Edit maklumat">Edit</button>
+              <button class="action-btn action-btn-view" data-action="view" data-id="${row.id}" type="button" title="Lihat butiran">Lihat</button>
+              <button class="action-btn action-btn-delete" data-action="delete" data-id="${row.id}" type="button" title="Padam rekod">Padam</button>
             </div>
           </td>
         </tr>

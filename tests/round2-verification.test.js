@@ -367,12 +367,13 @@ assert(
   'Homepage clearly states commencement: Latihan bermula semester depan'
 );
 
-// Contact person on Homepage: Syahmi only (per latest user directive)
+// Homepage contact list: Pn Azila, En Fadhil, Coach Syahmi, and Hud
 assert(
-  mainJsSource.includes('<span class="contact-name">Syahmi</span>') &&
   mainJsSource.includes('010-796 5236') &&
-  !mainJsSource.includes('<span class="contact-name">Pn Azila</span>'),
-  'Homepage contact list displays Syahmi only per latest user directive'
+  mainJsSource.includes('013-932 6767') &&
+  mainJsSource.includes('011-1089 4945') &&
+  mainJsSource.includes('011-2081 2650'),
+  'Homepage contact list displays all key leaders (Pn Azila, En Fadhil, Coach Syahmi, Hud)'
 );
 
 // Official affiliations: PSSGM and MPP TVETMARA Besut
