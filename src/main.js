@@ -1183,6 +1183,14 @@ async function adminPage(session) {
             </select>
           </label>
           <label class="filter-select">
+            <span class="sr-only">Tapis kesihatan</span>
+            <select id="filter-health">
+              <option value="">Semua kesihatan</option>
+              <option value="Ada">Ada masalah</option>
+              <option value="Tiada">Tiada masalah</option>
+            </select>
+          </label>
+          <label class="filter-select">
             <span class="sr-only">Tapis status</span>
             <select id="filter-status">
               <option value="">Semua status</option>
@@ -1202,19 +1210,20 @@ async function adminPage(session) {
                 <th>Email</th>
                 <th>Jantina</th>
                 <th>Pengalaman</th>
+                <th>Kesihatan</th>
                 <th>Telefon / WhatsApp</th>
                 <th>Status</th>
                 <th style="text-align: right; min-width: 260px;">Tindakan</th>
               </tr>
             </thead>
             <tbody id="registration-rows">
-              <tr><td colspan="10" style="text-align:center; padding: 30px;">Memuatkan pangkalan data...</td></tr>
+              <tr><td colspan="11" style="text-align:center; padding: 30px;">Memuatkan pangkalan data...</td></tr>
             </tbody>
           </table>
           <div id="empty-state" class="empty-state" hidden>Tiada rekod sepadan. Cuba ubah carian atau tapisan.</div>
         </div>
         <div class="table-foot">
-          <span>Maklumat kesihatan hanya kelihatan dalam paparan butiran.</span>
+          <span>Status &amp; maklumat kesihatan dipaparkan secara langsung. Klik 'Lihat' untuk butiran penuh.</span>
           <span><b id="visible-count">0</b> rekod dipaparkan</span>
         </div>
       </section>
@@ -1271,9 +1280,10 @@ async function adminPage(session) {
   const semesterSelect = document.querySelector('#filter-semester');
   const genderSelect = document.querySelector('#filter-gender');
   const expSelect = document.querySelector('#filter-experience');
+  const healthSelect = document.querySelector('#filter-health');
   const statusSelect = document.querySelector('#filter-status');
 
-  const filterControls = [searchInput, courseSelect, semesterSelect, genderSelect, expSelect, statusSelect];
+  const filterControls = [searchInput, courseSelect, semesterSelect, genderSelect, expSelect, healthSelect, statusSelect];
   const tbody = document.querySelector('#registration-rows');
   const dialog = document.querySelector('#participant-dialog');
 
@@ -1283,10 +1293,11 @@ async function adminPage(session) {
     const semester = (semesterSelect?.value || '').trim().toLowerCase();
     const gender = (genderSelect?.value || '').trim().toLowerCase();
     const experience = (expSelect?.value || '').trim().toLowerCase();
+    const health = (healthSelect?.value || '').trim();
     const status = (statusSelect?.value || '').trim().toLowerCase();
 
     const shown = members.filter(row => {
-      const searchTarget = `${row.full_name || ''} ${row.program || ''} ${row.matric_number || ''} ${row.member_id || ''} ${row.ic_number || ''} ${row.email || ''}`.toLowerCase();
+      const searchTarget = `${row.full_name || ''} ${row.program || ''} ${row.matric_number || ''} ${row.member_id || ''} ${row.ic_number || ''} ${row.email || ''} ${row.health || ''} ${row.health_details || ''} ${row.healthDetails || ''} ${row.health_issues || ''}`.toLowerCase();
       const parsed = parseProgramDetails(row.program);
 
       const matchesQuery = !query || searchTarget.includes(query);
@@ -1306,9 +1317,21 @@ async function adminPage(session) {
 
       const matchesGender = !gender || (row.gender || '').toLowerCase() === gender;
       const matchesExperience = !experience || (row.experience || '').toLowerCase() === experience;
+
+      const hasHealthIssue =
+        row.health === 'Ada' ||
+        (row.health_details && row.health_details.trim().toLowerCase() !== 'tiada' && row.health_details.trim() !== '') ||
+        (row.healthDetails && row.healthDetails.trim().toLowerCase() !== 'tiada' && row.healthDetails.trim() !== '') ||
+        (row.health_issues && row.health_issues.trim().toLowerCase() !== 'tiada' && row.health_issues.trim() !== '');
+
+      const matchesHealth =
+        !health ||
+        (health === 'Ada' && hasHealthIssue) ||
+        (health === 'Tiada' && !hasHealthIssue);
+
       const matchesStatus = !status || (row.status || '').toLowerCase() === status;
 
-      return matchesQuery && matchesCourse && matchesSemester && matchesGender && matchesExperience && matchesStatus;
+      return matchesQuery && matchesCourse && matchesSemester && matchesGender && matchesExperience && matchesHealth && matchesStatus;
     });
 
     tbody.innerHTML = shown
@@ -1322,6 +1345,14 @@ async function adminPage(session) {
             ?.slice(-2)
             .toUpperCase() || 'A';
         const isDiterima = row.status === 'Diterima';
+
+        const hasHealthIssue =
+          row.health === 'Ada' ||
+          (row.health_details && row.health_details.trim().toLowerCase() !== 'tiada' && row.health_details.trim() !== '') ||
+          (row.healthDetails && row.healthDetails.trim().toLowerCase() !== 'tiada' && row.healthDetails.trim() !== '') ||
+          (row.health_issues && row.health_issues.trim().toLowerCase() !== 'tiada' && row.health_issues.trim() !== '');
+        const healthDetail = row.health_details || row.healthDetails || row.health_issues || '';
+
         return `
         <tr>
           <td>
@@ -1336,6 +1367,16 @@ async function adminPage(session) {
           <td><a class="table-email-link" href="mailto:${row.email || ''}" title="${row.email || 'Tiada email'}">${row.email || '—'}</a></td>
           <td>${row.gender || '—'}</td>
           <td><span class="experience-tag ${row.experience === 'Ada' ? 'yes' : ''}">${row.experience || '—'}</span></td>
+          <td>
+            ${
+              hasHealthIssue
+                ? `<div class="health-cell">
+                    <span class="health-tag has-issue">Ada</span>
+                    ${healthDetail && healthDetail.toLowerCase() !== 'ada' ? `<small class="health-detail-text" title="${healthDetail}">${healthDetail}</small>` : ''}
+                  </div>`
+                : `<span class="health-tag none">Tiada</span>`
+            }
+          </td>
           <td><a class="whatsapp-link" href="${whatsappUrl(row.phone)}" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp ${row.full_name}"><span aria-hidden="true">◉</span>${row.phone || '—'}</a></td>
           <td><span class="status-tag ${isDiterima ? 'accepted' : 'review'}">${row.status || 'Semakan'}</span></td>
           <td>
@@ -1662,6 +1703,8 @@ function exportAdminCsv(members) {
     'Email',
     'Jantina',
     'Pengalaman Silat',
+    'Masalah Kesihatan',
+    'Butiran Kesihatan',
     'Status',
     'Tarikh Daftar',
   ];
@@ -1674,8 +1717,10 @@ function exportAdminCsv(members) {
     m.email || '',
     m.gender || '',
     m.experience || '',
+    m.health || (m.health_details ? 'Ada' : 'Tiada'),
+    m.health_details || m.healthDetails || m.health_issues || '',
     m.status || '',
-    m.created_at ? m.created_at.split('T')[0] : '',
+    formatMalayDate(m.created_at),
   ]);
   const csv = [headings, ...rows]
     .map(row => row.map(v => `"${String(v).replaceAll('"', '""')}"`).join(','))

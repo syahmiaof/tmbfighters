@@ -1445,6 +1445,7 @@ select option {
   gap: 10px;
   padding: 12px 24px 18px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  flex-wrap: wrap;
 }
 .search-field { position: relative; flex: 1 1 240px; }
 .search-field span { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #777; font-size: 13px; }
@@ -1452,15 +1453,20 @@ select option {
 .filter-select select { height: 38px; padding: 0 12px; border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 5px; background: rgba(8, 10, 16, 0.52); color: #dfdcda; font-size: 11px; }
 
 .table-wrap { overflow-x: auto; }
-.table-wrap table { width: 100%; min-width: 780px; border-collapse: collapse; text-align: left; }
-.table-wrap th { height: 40px; padding: 0 18px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); color: #aaa7a4; font-size: 9px; font-weight: 800; text-transform: uppercase; }
-.table-wrap td { height: 50px; padding: 0 18px; border-top: 1px solid rgba(255, 255, 255, 0.06); color: #f1f0ee; font-size: 11px; }
+.table-wrap table { width: 100%; min-width: 880px; border-collapse: collapse; text-align: left; }
+.table-wrap th { height: 40px; padding: 0 16px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); color: #aaa7a4; font-size: 9px; font-weight: 800; text-transform: uppercase; white-space: nowrap; }
+.table-wrap td { height: 50px; padding: 0 16px; border-top: 1px solid rgba(255, 255, 255, 0.06); color: #f1f0ee; font-size: 11px; }
 .participant-link { display: inline-flex; align-items: center; gap: 10px; background: transparent; border: 0; color: inherit; padding: 0; cursor: pointer; text-align: left; }
 .participant-link .avatar { width: 28px; height: 28px; border-radius: 50%; background: rgba(217, 28, 40, 0.2); border: 1px solid rgba(217, 28, 40, 0.45); color: #ffadb4; display: grid; place-items: center; font-size: 9px; font-weight: 800; }
 .participant-link strong { display: block; font-size: 12px; color: #fff; }
 .participant-link small { display: block; font-size: 9px; color: #8c8986; font-family: monospace; }
 .experience-tag { padding: 3px 8px; border-radius: 4px; font-size: 9px; font-weight: 700; background: rgba(255, 255, 255, 0.05); color: #aaa7a4; }
 .experience-tag.yes { background: rgba(217, 28, 40, 0.18); color: #ffadb4; border: 1px solid rgba(217, 28, 40, 0.4); }
+.health-cell { display: flex; flex-direction: column; gap: 3px; max-width: 140px; }
+.health-tag { display: inline-flex; align-items: center; padding: 3px 8px; border-radius: 4px; font-size: 9px; font-weight: 700; width: fit-content; }
+.health-tag.none { background: rgba(255, 255, 255, 0.05); color: #aaa7a4; }
+.health-tag.has-issue { background: rgba(239, 68, 68, 0.2); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.45); }
+.health-detail-text { font-size: 9px; color: #fca5a5; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 130px; display: block; }
 .whatsapp-link { color: #4ade80; text-decoration: none; font-size: 10px; font-weight: 700; display: inline-flex; align-items: center; gap: 5px; }
 .status-tag { padding: 4px 8px; border-radius: 4px; font-size: 9px; font-weight: 800; }
 .status-tag.accepted { background: rgba(34, 197, 94, 0.2); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.5); }
