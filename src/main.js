@@ -344,7 +344,7 @@ export async function registrationPage() {
             id: m.id,
             name: m.full_name,
             program: m.program,
-            registeredAt: m.created_at ? m.created_at.split('T')[0] : '2026-11-04',
+            registeredAt: m.created_at || null,
             status: m.status || 'Semakan',
           }))
         : [];
@@ -354,6 +354,22 @@ export async function registrationPage() {
   } catch (err) {
     console.warn('Error loading tracker from database:', err);
     setupTracker([]);
+  }
+}
+
+export function formatMalayDate(rawDate) {
+  if (!rawDate) return '05 Nov 2026';
+  try {
+    const d = new Date(rawDate);
+    if (isNaN(d.getTime())) return String(rawDate);
+    return new Intl.DateTimeFormat('ms-MY', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric',
+      timeZone: 'Asia/Kuala_Lumpur',
+    }).format(d);
+  } catch (e) {
+    return String(rawDate);
   }
 }
 
@@ -393,15 +409,9 @@ function setupTracker(records) {
           .slice(0, 2)
           .join('')
           .toUpperCase();
-        const formattedDate = item.registeredAt
-          ? new Intl.DateTimeFormat('ms-MY', {
-              day: '2-digit',
-              month: 'short',
-              year: 'numeric',
-            }).format(new Date(`${item.registeredAt}T00:00:00`))
-          : '04 Nov 2026';
+        const formattedDate = formatMalayDate(item.registeredAt);
 
-          const isApproved = item.status === 'Diterima' || item.status === 'Aktif';
+        const isApproved = item.status === 'Diterima' || item.status === 'Aktif';
         return `
         <tr>
           <td class="tracker-num">${String(idx + 1).padStart(2, '0')}</td>
@@ -1619,7 +1629,7 @@ function openDetails(row, dialog, onUpdate) {
       <div><dt>Pengalaman silat</dt><dd>${row.experience || '—'}</dd></div>
       <div><dt>Masalah kesihatan</dt><dd>${row.health === 'Ada' ? row.health_details || 'Ada' : 'Tiada'}</dd></div>
       <div><dt>Status keahlian</dt><dd><span class="status-tag ${row.status === 'Diterima' ? 'accepted' : 'review'}">${row.status}</span></dd></div>
-      <div><dt>Tarikh daftar</dt><dd>${row.created_at ? new Intl.DateTimeFormat('ms-MY', { dateStyle: 'long' }).format(new Date(row.created_at)) : '04 Nov 2026'}</dd></div>
+      <div><dt>Tarikh daftar</dt><dd>${row.created_at ? new Intl.DateTimeFormat('ms-MY', { dateStyle: 'long', timeZone: 'Asia/Kuala_Lumpur' }).format(new Date(row.created_at)) : '5 November 2026'}</dd></div>
     </dl>
     <div style="margin-top: 20px; display: flex; justify-content: flex-end; gap: 10px;">
       <button id="toggle-status-btn" class="outline-link" type="button" style="cursor: pointer; background: transparent;">
@@ -1872,9 +1882,9 @@ async function athleteAccountPage(authUser) {
       .map(p => {
         const amountFormatted = Number(p.amount || 10).toFixed(2);
         const paidDate = p.paid_at
-          ? new Intl.DateTimeFormat('ms-MY', { dateStyle: 'medium' }).format(new Date(p.paid_at))
+          ? new Intl.DateTimeFormat('ms-MY', { dateStyle: 'medium', timeZone: 'Asia/Kuala_Lumpur' }).format(new Date(p.paid_at))
           : p.status === 'Selesai'
-          ? '04 Nov 2026'
+          ? '05 Nov 2026'
           : '—';
         return `
         <tr>
