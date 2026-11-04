@@ -406,8 +406,8 @@ const indexHtmlPath = path.join(rootDir, 'index.html');
 const indexHtmlSource = fs.readFileSync(indexHtmlPath, 'utf-8');
 
 assert(
-  indexHtmlSource.includes('Sasaran 30 peserta (Pendaftaran Terbuka)'),
-  'index.html meta description updated to align with Sasaran 30 peserta (Pendaftaran Terbuka)'
+  indexHtmlSource.includes('Kelab Pencak Silat TVETMARA Besut. Ayuh sertai kami'),
+  'index.html meta description updated with clean preview text'
 );
 
 // -------------------------------------------------------------
@@ -471,7 +471,7 @@ assert(distExists, 'Production build artifact dist/index.html exists');
 if (distExists) {
   const distHtmlSource = fs.readFileSync(distHtmlPath, 'utf-8');
   assert(distHtmlSource.includes('data-theme="dark"'), 'Built index.html contains dark theme attribute');
-  assert(distHtmlSource.includes('Sasaran 30 peserta (Pendaftaran Terbuka)'), 'Built index.html contains updated meta description');
+  assert(distHtmlSource.includes('Kelab Pencak Silat TVETMARA Besut. Ayuh sertai kami'), 'Built index.html contains clean meta description');
 }
 
 // -------------------------------------------------------------

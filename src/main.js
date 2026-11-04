@@ -301,7 +301,7 @@ export async function registrationPage() {
             <span class="live-toast-time" id="toast-time">Baru sahaja</span>
           </div>
           <p class="live-toast-message">
-            🎉 <strong id="toast-name">Muhammad Amirul bin Rosli</strong> (<span id="toast-prog">DFK sem 1</span>) telah mendaftar sebagai ahli!
+            🎉 <strong id="toast-name"></strong> (<span id="toast-prog"></span>) telah mendaftar sebagai ahli!
           </p>
         </div>
         <button class="live-toast-close" id="toast-close" type="button" aria-label="Tutup notifikasi">×</button>
@@ -436,7 +436,11 @@ function startLiveToast(records) {
   const toastTime = document.querySelector('#toast-time');
   const toastClose = document.querySelector('#toast-close');
 
-  if (!container || !toastName || !records || records.length === 0) return;
+  if (!container || !toastName || !records || records.length === 0) {
+    if (container) container.style.display = 'none';
+    return;
+  }
+  container.style.display = '';
 
   let currentIndex = 0;
   let isPaused = false;
