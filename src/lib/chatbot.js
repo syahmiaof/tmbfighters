@@ -387,8 +387,9 @@ Fakta Utama:
 Jawab dalam Bahasa Melayu yang ringkas dan padat.`;
 
     const candidateModels = [
-      'openrouter/free',
       'nvidia/nemotron-3.5-lightning:free',
+      'openrouter/free',
+      'google/gemma-4-31b-it:free',
       'google/gemma-4-26b-a4b-it:free'
     ];
 
@@ -402,7 +403,7 @@ Jawab dalam Bahasa Melayu yang ringkas dan padat.`;
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
-            'HTTP-Referer': typeof window !== 'undefined' ? (window.location.origin || 'https://tmbfighters.com') : 'https://tmbfighters.com',
+            'HTTP-Referer': typeof window !== 'undefined' ? (window.location.origin || 'https://tmbfighters.vercel.app') : 'https://tmbfighters.vercel.app',
             'X-Title': 'TMB Fighters Lekir Bot'
           },
           signal: controller.signal,
@@ -412,8 +413,9 @@ Jawab dalam Bahasa Melayu yang ringkas dan padat.`;
               { role: 'system', content: systemPrompt },
               { role: 'user', content: userPrompt }
             ],
-            max_tokens: 220,
-            temperature: 0.7
+            max_tokens: 350,
+            temperature: 0.7,
+            reasoning: { max_tokens: 0 }
           })
         });
 
@@ -421,7 +423,10 @@ Jawab dalam Bahasa Melayu yang ringkas dan padat.`;
 
         if (res.ok) {
           const data = await res.json();
-          const botReply = data?.choices?.[0]?.message?.content?.trim();
+          let botReply = data?.choices?.[0]?.message?.content?.trim();
+          if (!botReply && data?.choices?.[0]?.message?.reasoning) {
+            botReply = data.choices[0].message.reasoning.trim();
+          }
           if (botReply) return botReply;
         } else {
           console.warn(`Lekir Bot [${model}] HTTP status:`, res.status);
