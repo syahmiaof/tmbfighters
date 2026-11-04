@@ -37,6 +37,126 @@ export function maskIC(ic) {
 }
 
 /**
+ * Normalizes any program and semester input to canonical "CODE Sem X" format.
+ * Supports both single string "DFK sem 1" and two arguments ("DFK", "Sem 1").
+ * Examples:
+ *   "dfk sem 1" -> "DFK Sem 1"
+ *   "DFK SEM 1" -> "DFK Sem 1"
+ *   "dga semester 3" -> "DGA Sem 3"
+ *   "ITW Sem2" -> "ITW Sem 2"
+ *   "DFK 1" -> "DFK Sem 1"
+ *   formatProgramSemester('DFK', 'Sem 1') -> "DFK Sem 1"
+ */
+export function formatProgramSemester(courseOrRaw, maybeSemester) {
+  if (maybeSemester) {
+    const course = String(courseOrRaw || '').trim().toUpperCase();
+    const semDigits = String(maybeSemester).replace(/\D/g, '');
+    const semNum = semDigits ? semDigits.charAt(0) : '1';
+    return `${course} Sem ${semNum}`;
+  }
+
+  const raw = String(courseOrRaw || '').trim();
+  if (!raw) return '';
+
+  // Pattern 1: Code + optional separator + Sem/Semester + optional space + digit
+  // e.g., 'DFK Sem 1', 'dfk sem 1', 'DFK SEM 1', 'DFK Sem1', 'DFK Semester 1', 'DFK - Sem 1'
+  const semMatch = raw.match(/^([A-Za-z]{2,10})\s*[-/]?\s*(?:sem(?:ester)?|s)\.?\s*([0-9]+)$/i);
+  if (semMatch) {
+    return `${semMatch[1].toUpperCase()} Sem ${semMatch[2]}`;
+  }
+
+  // Pattern 2: Standalone semester only, e.g. 'Sem 1', 'sem 3', 'Semester 2'
+  const semOnlyMatch = raw.match(/^(?:sem(?:ester)?|s)\.?\s*([0-9]+)$/i);
+  if (semOnlyMatch) {
+    return `Sem ${semOnlyMatch[1]}`;
+  }
+
+  // Pattern 3: Code + digit directly, e.g. 'DFK 1', 'SLR 5', 'dfk 2' (excluding words like 'sem', 'semester')
+  const codeDigitMatch = raw.match(/^(?!sem(?:ester)?$)([A-Za-z]{2,10})\s*[-/]?\s*([1-8])$/i);
+  if (codeDigitMatch) {
+    return `${codeDigitMatch[1].toUpperCase()} Sem ${codeDigitMatch[2]}`;
+  }
+
+  // Pattern 4: Just code without semester, e.g. 'DFK', 'slr' (excluding 'sem', 'semester')
+  const codeOnlyMatch = raw.match(/^(?!sem(?:ester)?$)([A-Za-z]{2,10})$/i);
+  if (codeOnlyMatch) {
+    return codeOnlyMatch[1].toUpperCase();
+  }
+
+  // Fallback: Return trimmed original string
+  return raw;
+}
+
+/**
+ * Parses a program string into its constituent code and semester components.
+ * Used for admin filtering and multi-criteria breakdown.
+ */
+export function parseProgramDetails(raw) {
+  if (!raw || typeof raw !== 'string') {
+    return { code: '', semester: '', semNum: null, raw: '' };
+  }
+  const trimmed = raw.trim();
+  if (!trimmed) {
+    return { code: '', semester: '', semNum: null, raw: '' };
+  }
+
+  // Pattern 1: Code + Semester
+  const semMatch = trimmed.match(/^([A-Za-z]{2,10})\s*[-/]?\s*(?:sem(?:ester)?|s)\.?\s*([0-9]+)$/i);
+  if (semMatch) {
+    const code = semMatch[1].toUpperCase();
+    const semNum = semMatch[2];
+    return {
+      code,
+      semester: `Sem ${semNum}`,
+      semNum,
+      raw: trimmed,
+    };
+  }
+
+  // Pattern 2: Standalone semester only
+  const semOnlyMatch = trimmed.match(/^(?:sem(?:ester)?|s)\.?\s*([0-9]+)$/i);
+  if (semOnlyMatch) {
+    return {
+      code: '',
+      semester: `Sem ${semOnlyMatch[1]}`,
+      semNum: semOnlyMatch[1],
+      raw: trimmed,
+    };
+  }
+
+  // Pattern 3: Code + digit directly
+  const codeDigitMatch = trimmed.match(/^(?!sem(?:ester)?$)([A-Za-z]{2,10})\s*[-/]?\s*([1-8])$/i);
+  if (codeDigitMatch) {
+    const code = codeDigitMatch[1].toUpperCase();
+    const semNum = codeDigitMatch[2];
+    return {
+      code,
+      semester: `Sem ${semNum}`,
+      semNum,
+      raw: trimmed,
+    };
+  }
+
+  // Pattern 4: Just code
+  const codeOnlyMatch = trimmed.match(/^(?!sem(?:ester)?$)([A-Za-z]{2,10})$/i);
+  if (codeOnlyMatch) {
+    return {
+      code: codeOnlyMatch[1].toUpperCase(),
+      semester: '',
+      semNum: null,
+      raw: trimmed,
+    };
+  }
+
+  return {
+    code: '',
+    semester: '',
+    semNum: null,
+    raw: trimmed,
+  };
+}
+
+/**
  * Public registration handler for new athletes/members
  */
 export async function registerMember(data) {
@@ -53,7 +173,7 @@ export async function registerMember(data) {
       ic_number: formattedIc,
       matric_number: matricNumber,
       member_id: matricNumber,
-      program: (data.program || '').trim().toUpperCase(),
+      program: formatProgramSemester(data.program),
       phone: (data.phone || '').trim(),
       email: (data.email || '').trim().toLowerCase(),
       gender: data.gender,
@@ -352,4 +472,47 @@ export async function logout() {
 
 export function onAuthStateChange(callback) {
   return supabase.auth.onAuthStateChange(callback);
+}
+
+/**
+ * Update member record (Admin action)
+ */
+export async function updateMemberRecord(id, updates) {
+  try {
+    const payload = {
+      ...updates,
+      updated_at: new Date().toISOString(),
+    };
+    if (payload.full_name) payload.full_name = payload.full_name.trim().toUpperCase();
+    if (payload.program) payload.program = formatProgramSemester(payload.program);
+    if (payload.matric_number) {
+      payload.matric_number = normalizeMatricNumber(payload.matric_number);
+      payload.member_id = payload.matric_number;
+    }
+
+    const { data, error } = await supabase
+      .from('members')
+      .update(payload)
+      .eq('id', id)
+      .select()
+      .single();
+
+    return { data, error };
+  } catch (err) {
+    return { data: null, error: err };
+  }
+}
+
+/**
+ * Delete member record (Admin action)
+ */
+export async function deleteMemberRecord(id) {
+  try {
+    // Delete related payments first to ensure referential integrity
+    await supabase.from('payments').delete().eq('member_id', id);
+    const { error } = await supabase.from('members').delete().eq('id', id);
+    return { error };
+  } catch (err) {
+    return { error: err };
+  }
 }

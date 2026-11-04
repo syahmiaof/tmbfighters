@@ -7,6 +7,10 @@ import {
   getAthleteProfile,
   uploadAthletePhoto,
   getAdminDashboardData,
+  updateMemberRecord,
+  deleteMemberRecord,
+  formatProgramSemester,
+  parseProgramDetails,
   getSession,
   getUser,
   logout,
@@ -31,6 +35,7 @@ let typewriterTimer = null;
 
 export function whatsappUrl(phone) {
   const digits = String(phone || '').replace(/\D/g, '');
+  if (!digits) return 'https://wa.me/';
   const normalized = digits.startsWith('60')
     ? digits
     : digits.startsWith('0')
@@ -193,8 +198,24 @@ export async function registrationPage() {
               <small class="field-error" aria-live="polite"></small>
             </div>
             <div class="field">
-              <label for="program">04 <span>PROGRAM &amp; SEMESTER (cth: DFK SEM 1)</span> <b>*</b></label>
-              <input id="program" name="program" type="text" placeholder="Contoh: DFK SEM 1" style="text-transform: uppercase;" required />
+              <label for="program">04 <span>PROGRAM &amp; SEMESTER</span> <b>*</b></label>
+              <div class="program-semester-grid">
+                <select id="program" name="programCode" aria-label="Program Pengajian" required>
+                  <option value="" disabled selected>Pilih Program</option>
+                  <option value="DFK">DFK</option>
+                  <option value="DGA">DGA</option>
+                  <option value="ITW">ITW</option>
+                  <option value="SLR">SLR</option>
+                </select>
+                <select id="semester" name="semester" aria-label="Semester Pengajian" required>
+                  <option value="" disabled selected>Pilih Semester</option>
+                  <option value="Sem 1">Sem 1</option>
+                  <option value="Sem 2">Sem 2</option>
+                  <option value="Sem 3">Sem 3</option>
+                  <option value="Sem 4">Sem 4</option>
+                  <option value="Sem 5">Sem 5</option>
+                </select>
+              </div>
               <small class="field-error" aria-live="polite"></small>
             </div>
             <div class="field">
@@ -547,7 +568,8 @@ function setupForm() {
   const fullNameInput = form.querySelector('#fullName');
   const icInput = form.querySelector('#icNumber');
   const matricInput = form.querySelector('#matricNumber');
-  const programInput = form.querySelector('#program');
+  const programCodeSelect = form.querySelector('#program');
+  const semesterSelect = form.querySelector('#semester');
 
   // Auto-uppercase Full Name as the student types
   if (fullNameInput) {
@@ -573,13 +595,6 @@ function setupForm() {
     });
   }
 
-  // Auto-uppercase Program & Semester
-  if (programInput) {
-    programInput.addEventListener('input', () => {
-      programInput.value = programInput.value.toUpperCase();
-    });
-  }
-
   const healthInputs = [...form.querySelectorAll('[name="health"]')];
   const healthWrap = form.querySelector('.health-details');
   const healthDetails = form.querySelector('#healthDetails');
@@ -601,12 +616,14 @@ function setupForm() {
     })
   );
 
-  form.querySelectorAll('input').forEach(input =>
-    input.addEventListener('input', () => {
-      clearError(input);
+  form.querySelectorAll('input, select').forEach(control => {
+    const handleClear = () => {
+      clearError(control);
       if (generalError) generalError.hidden = true;
-    })
-  );
+    };
+    control.addEventListener('input', handleClear);
+    control.addEventListener('change', handleClear);
+  });
   form.querySelectorAll('input[type="radio"]').forEach(input =>
     input.addEventListener('change', () => {
       clearChoiceError(input.name);
@@ -624,7 +641,10 @@ function setupForm() {
       ? `${rawIc.slice(0, 6)}-${rawIc.slice(6, 8)}-${rawIc.slice(8, 12)}`
       : (values.get('icNumber')?.trim() || '');
     const matricNumber = normalizeMatricNumber(values.get('matricNumber') || '');
-    const program = (values.get('program')?.trim() || '').toUpperCase();
+    const programCode = values.get('programCode')?.trim() || '';
+    const semester = values.get('semester')?.trim() || '';
+    const combinedProgram = (programCode && semester) ? `${programCode} ${semester}` : '';
+    const program = combinedProgram || (values.get('program')?.trim() || '');
     const phone = values.get('phone')?.trim() || '';
     const email = values.get('email')?.trim() || '';
     const gender = values.get('gender');
@@ -646,7 +666,14 @@ function setupForm() {
           ? ''
           : 'Masukkan no. matrik pelajar yang sah (cth: DFK2401).',
       ],
-      ['program', program ? '' : 'Masukkan program dan semester anda.'],
+      [
+        'programCode',
+        programCode ? '' : (!semester ? 'Pilih program dan semester anda.' : 'Pilih program pengajian anda.'),
+      ],
+      [
+        'semester',
+        semester ? '' : (!programCode ? 'Pilih program dan semester anda.' : 'Pilih semester pengajian anda.'),
+      ],
       [
         'phone',
         validPhone(phone)
@@ -667,7 +694,10 @@ function setupForm() {
 
     const firstError = form.querySelector('.field-error:not(:empty)');
     if (firstError) {
-      firstError.closest('.field')?.querySelector('input')?.focus();
+      const field = firstError.closest('.field');
+      const target = field?.querySelector('[aria-invalid="true"]') ||
+                     field?.querySelector('input:not([type="hidden"]), select');
+      target?.focus();
       return;
     }
 
@@ -1103,9 +1133,24 @@ async function adminPage(session) {
             <input id="search" type="search" placeholder="Cari nama, matrik, IC atau program" aria-label="Cari nama, matrik, IC atau program" />
           </label>
           <label class="filter-select">
-            <span class="sr-only">Tapis program</span>
-            <select id="filter-program">
-              <option value="">Semua program</option>
+            <span class="sr-only">Tapis kod kursus</span>
+            <select id="filter-course">
+              <option value="">Semua kod</option>
+              <option value="DFK">DFK</option>
+              <option value="DGA">DGA</option>
+              <option value="ITW">ITW</option>
+              <option value="SLR">SLR</option>
+            </select>
+          </label>
+          <label class="filter-select">
+            <span class="sr-only">Tapis semester</span>
+            <select id="filter-semester">
+              <option value="">Semua semester</option>
+              <option value="Sem 1">Sem 1</option>
+              <option value="Sem 2">Sem 2</option>
+              <option value="Sem 3">Sem 3</option>
+              <option value="Sem 4">Sem 4</option>
+              <option value="Sem 5">Sem 5</option>
             </select>
           </label>
           <label class="filter-select">
@@ -1145,7 +1190,7 @@ async function adminPage(session) {
                 <th>Pengalaman</th>
                 <th>Telefon / WhatsApp</th>
                 <th>Status</th>
-                <th><span class="sr-only">Butiran</span></th>
+                <th style="text-align: right; min-width: 140px;">Tindakan</th>
               </tr>
             </thead>
             <tbody id="registration-rows">
@@ -1184,54 +1229,72 @@ async function adminPage(session) {
     console.error('Failed to load dashboard data:', err);
   }
 
-  // Update live sync indicator
-  const syncLabel = document.querySelector('#admin-sync-label');
-  if (syncLabel) {
-    syncLabel.textContent = `LIVE SYNC (${members.length})`;
-  }
+  const updateStats = () => {
+    const totalCount = members.length;
+    const reviewCount = members.filter(m => m.status === 'Semakan').length;
+    const confirmedCount = members.filter(m => m.status === 'Diterima' || m.status === 'Aktif').length;
+    const totalRevenue = payments
+      .filter(p => p.status === 'Selesai')
+      .reduce((sum, p) => sum + Number(p.amount || 0), 0);
 
-  // Update stat cards
-  const totalCount = members.length;
-  const reviewCount = members.filter(m => m.status === 'Semakan').length;
-  const confirmedCount = members.filter(m => m.status === 'Diterima' || m.status === 'Aktif').length;
-  const totalRevenue = payments
-    .filter(p => p.status === 'Selesai')
-    .reduce((sum, p) => sum + Number(p.amount || 0), 0);
+    const totalEl = document.querySelector('#stat-total');
+    const reviewEl = document.querySelector('#stat-review');
+    const confirmedEl = document.querySelector('#stat-confirmed');
+    const revenueEl = document.querySelector('#stat-revenue');
+    const syncEl = document.querySelector('#admin-sync-label');
 
-  document.querySelector('#stat-total').innerHTML = `${totalCount}<small> peserta</small>`;
-  document.querySelector('#stat-review').innerHTML = `${reviewCount}<small> peserta</small>`;
-  document.querySelector('#stat-confirmed').innerHTML = `${confirmedCount}<small> peserta</small>`;
-  document.querySelector('#stat-revenue').innerHTML = `RM ${totalRevenue.toFixed(2)}`;
+    if (totalEl) totalEl.innerHTML = `${totalCount}<small> peserta</small>`;
+    if (reviewEl) reviewEl.innerHTML = `${reviewCount}<small> peserta</small>`;
+    if (confirmedEl) confirmedEl.innerHTML = `${confirmedCount}<small> peserta</small>`;
+    if (revenueEl) revenueEl.innerHTML = `RM ${totalRevenue.toFixed(2)}`;
+    if (syncEl) syncEl.textContent = `LIVE SYNC (${totalCount})`;
+  };
 
-  // Populate program filter dropdown
-  const programSelect = document.querySelector('#filter-program');
-  [...new Set(members.map(row => row.program).filter(Boolean))].sort().forEach(prog => {
-    programSelect.insertAdjacentHTML('beforeend', `<option value="${prog}">${prog}</option>`);
-  });
+  updateStats();
 
-  const filters = [
-    'search',
-    'filter-program',
-    'filter-gender',
-    'filter-experience',
-    'filter-status',
-  ].map(id => document.getElementById(id));
+  const searchInput = document.querySelector('#search');
+  const courseSelect = document.querySelector('#filter-course');
+  const semesterSelect = document.querySelector('#filter-semester');
+  const genderSelect = document.querySelector('#filter-gender');
+  const expSelect = document.querySelector('#filter-experience');
+  const statusSelect = document.querySelector('#filter-status');
+
+  const filterControls = [searchInput, courseSelect, semesterSelect, genderSelect, expSelect, statusSelect];
   const tbody = document.querySelector('#registration-rows');
   const dialog = document.querySelector('#participant-dialog');
 
   const renderTable = () => {
-    const [query, program, gender, experience, status] = filters.map(
-      el => (el?.value || '').trim().toLowerCase()
-    );
+    const query = (searchInput?.value || '').trim().toLowerCase();
+    const course = (courseSelect?.value || '').trim().toUpperCase();
+    const semester = (semesterSelect?.value || '').trim().toLowerCase();
+    const gender = (genderSelect?.value || '').trim().toLowerCase();
+    const experience = (expSelect?.value || '').trim().toLowerCase();
+    const status = (statusSelect?.value || '').trim().toLowerCase();
+
     const shown = members.filter(row => {
       const searchTarget = `${row.full_name || ''} ${row.program || ''} ${row.matric_number || ''} ${row.member_id || ''} ${row.ic_number || ''}`.toLowerCase();
-      return (
-        (!query || searchTarget.includes(query)) &&
-        (!program || (row.program || '').toLowerCase() === program) &&
-        (!gender || (row.gender || '').toLowerCase() === gender) &&
-        (!experience || (row.experience || '').toLowerCase() === experience) &&
-        (!status || (row.status || '').toLowerCase() === status)
-      );
+      const parsed = parseProgramDetails(row.program);
+
+      const matchesQuery = !query || searchTarget.includes(query);
+      const matchesCourse =
+        !course ||
+        course === 'SEMUA KOD' ||
+        course === 'SEMUA' ||
+        parsed.code === course ||
+        (row.program || '').toUpperCase().startsWith(course);
+
+      const matchesSemester =
+        !semester ||
+        semester === 'semua semester' ||
+        semester === 'semua' ||
+        (parsed.semester && parsed.semester.toLowerCase() === semester) ||
+        (parsed.semNum && semester.includes(parsed.semNum));
+
+      const matchesGender = !gender || (row.gender || '').toLowerCase() === gender;
+      const matchesExperience = !experience || (row.experience || '').toLowerCase() === experience;
+      const matchesStatus = !status || (row.status || '').toLowerCase() === status;
+
+      return matchesQuery && matchesCourse && matchesSemester && matchesGender && matchesExperience && matchesStatus;
     });
 
     tbody.innerHTML = shown
@@ -1247,7 +1310,7 @@ async function adminPage(session) {
         return `
         <tr>
           <td>
-            <button class="participant-link" data-id="${row.id}" type="button">
+            <button class="participant-link" data-action="view" data-id="${row.id}" type="button">
               <span class="avatar">${initials}</span>
               <span><strong>${row.full_name}</strong><small>${matric}</small></span>
             </button>
@@ -1259,31 +1322,65 @@ async function adminPage(session) {
           <td><span class="experience-tag ${row.experience === 'Ada' ? 'yes' : ''}">${row.experience || '—'}</span></td>
           <td><a class="whatsapp-link" href="${whatsappUrl(row.phone)}" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp ${row.full_name}"><span aria-hidden="true">◉</span>${row.phone || '—'}</a></td>
           <td><span class="status-tag ${row.status === 'Diterima' ? 'accepted' : 'review'}">${row.status || 'Semakan'}</span></td>
-          <td><button class="more-button" data-id="${row.id}" type="button" aria-label="Lihat butiran ${row.full_name}">↗</button></td>
+          <td>
+            <div class="action-btns-group">
+              <button class="action-btn action-btn-status" data-action="toggle-status" data-id="${row.id}" type="button" title="Tukar status (${row.status === 'Diterima' ? 'Ubah ke Semakan' : 'Ubah ke Diterima'})">⚡</button>
+              <button class="action-btn action-btn-edit" data-action="edit" data-id="${row.id}" type="button" title="Edit maklumat">✏️</button>
+              <button class="action-btn action-btn-view" data-action="view" data-id="${row.id}" type="button" title="Lihat butiran">👁️</button>
+              <button class="action-btn action-btn-delete" data-action="delete" data-id="${row.id}" type="button" title="Padam rekod">🗑️</button>
+            </div>
+          </td>
         </tr>
       `;
       })
       .join('');
 
-    document.querySelector('#result-count').textContent = `${shown.length} rekod`;
-    document.querySelector('#visible-count').textContent = shown.length;
-    document.querySelector('#empty-state').hidden = shown.length > 0;
+    const resCount = document.querySelector('#result-count');
+    const visCount = document.querySelector('#visible-count');
+    const emptyState = document.querySelector('#empty-state');
+    if (resCount) resCount.textContent = `${shown.length} rekod`;
+    if (visCount) visCount.textContent = shown.length;
+    if (emptyState) emptyState.hidden = shown.length > 0;
   };
 
-  filters.forEach(el => el?.addEventListener('input', renderTable));
+  filterControls.forEach(el => el?.addEventListener('input', renderTable));
+  filterControls.forEach(el => el?.addEventListener('change', renderTable));
 
-  tbody.addEventListener('click', event => {
-    const button = event.target.closest('[data-id]');
-    if (button) {
-      const member = members.find(r => String(r.id) === String(button.dataset.id));
-      if (member) {
-        openDetails(member, dialog, async () => {
-          const refreshed = await getAdminDashboardData();
-          members = refreshed.members || [];
-          payments = refreshed.payments || [];
-          renderTable();
-        });
+  tbody.addEventListener('click', async event => {
+    const actionBtn = event.target.closest('[data-action]');
+    const participantLink = event.target.closest('.participant-link');
+    const targetEl = actionBtn || participantLink;
+    if (!targetEl) return;
+
+    const action = targetEl.dataset.action || 'view';
+    const id = targetEl.dataset.id;
+    const member = members.find(r => String(r.id) === String(id));
+    if (!member) return;
+
+    const refreshDashboard = async () => {
+      const refreshed = await getAdminDashboardData();
+      members = refreshed.members || [];
+      payments = refreshed.payments || [];
+      updateStats();
+      renderTable();
+    };
+
+    if (action === 'view') {
+      openDetails(member, dialog, refreshDashboard);
+    } else if (action === 'edit') {
+      openEditModal(member, dialog, refreshDashboard);
+    } else if (action === 'delete') {
+      openDeleteModal(member, dialog, refreshDashboard);
+    } else if (action === 'toggle-status') {
+      actionBtn.disabled = true;
+      const newStatus = member.status === 'Diterima' ? 'Semakan' : 'Diterima';
+      const { error } = await updateMemberRecord(member.id, { status: newStatus });
+      if (!error) {
+        member.status = newStatus;
+        updateStats();
+        renderTable();
       }
+      actionBtn.disabled = false;
     }
   });
 
@@ -1294,6 +1391,203 @@ async function adminPage(session) {
   document.querySelector('#export-button')?.addEventListener('click', () => exportAdminCsv(members));
 
   renderTable();
+}
+
+function openEditModal(member, dialog, onUpdate) {
+  const matric = member.matric_number || member.member_id || '—';
+  const detail = document.querySelector('#participant-detail');
+  const parsed = parseProgramDetails(member.program);
+  const currentCode = parsed.code || 'DFK';
+  const currentSem = parsed.semester || 'Sem 1';
+
+  detail.innerHTML = `
+    <div class="dialog-head">
+      <div>
+        <p class="eyebrow">EDIT REKOD ATLET · ${matric}</p>
+        <h2>Kemaskini Maklumat Peserta</h2>
+      </div>
+      <button class="dialog-close" data-close type="button" aria-label="Tutup">×</button>
+    </div>
+    <form id="edit-member-form" class="edit-form">
+      <div class="edit-form-grid">
+        <div class="edit-field full-span">
+          <label class="edit-label" for="edit-full-name">Nama Penuh *</label>
+          <input id="edit-full-name" name="fullName" class="edit-input" type="text" value="${member.full_name || ''}" required style="text-transform: uppercase;" />
+        </div>
+        <div class="edit-field">
+          <label class="edit-label" for="edit-matric">No. Matrik Pelajar *</label>
+          <input id="edit-matric" name="matricNumber" class="edit-input" type="text" value="${matric}" required style="text-transform: uppercase;" />
+        </div>
+        <div class="edit-field">
+          <label class="edit-label" for="edit-ic">No. Kad Pengenalan *</label>
+          <input id="edit-ic" name="icNumber" class="edit-input" type="text" value="${member.ic_number || ''}" required />
+        </div>
+        <div class="edit-field">
+          <label class="edit-label" for="edit-program-code">Program Pengajian *</label>
+          <select id="edit-program-code" name="programCode" class="edit-select" required>
+            <option value="DFK" ${currentCode === 'DFK' ? 'selected' : ''}>DFK</option>
+            <option value="DGA" ${currentCode === 'DGA' ? 'selected' : ''}>DGA</option>
+            <option value="ITW" ${currentCode === 'ITW' ? 'selected' : ''}>ITW</option>
+            <option value="SLR" ${currentCode === 'SLR' ? 'selected' : ''}>SLR</option>
+          </select>
+        </div>
+        <div class="edit-field">
+          <label class="edit-label" for="edit-semester">Semester Pengajian *</label>
+          <select id="edit-semester" name="semester" class="edit-select" required>
+            <option value="Sem 1" ${currentSem === 'Sem 1' ? 'selected' : ''}>Sem 1</option>
+            <option value="Sem 2" ${currentSem === 'Sem 2' ? 'selected' : ''}>Sem 2</option>
+            <option value="Sem 3" ${currentSem === 'Sem 3' ? 'selected' : ''}>Sem 3</option>
+            <option value="Sem 4" ${currentSem === 'Sem 4' ? 'selected' : ''}>Sem 4</option>
+            <option value="Sem 5" ${currentSem === 'Sem 5' ? 'selected' : ''}>Sem 5</option>
+          </select>
+        </div>
+        <div class="edit-field">
+          <label class="edit-label" for="edit-phone">No Telefon / WhatsApp *</label>
+          <input id="edit-phone" name="phone" class="edit-input" type="tel" value="${member.phone || ''}" required />
+        </div>
+        <div class="edit-field">
+          <label class="edit-label" for="edit-status">Status Keahlian *</label>
+          <select id="edit-status" name="status" class="edit-select" required>
+            <option value="Diterima" ${member.status === 'Diterima' ? 'selected' : ''}>Diterima</option>
+            <option value="Semakan" ${member.status === 'Semakan' ? 'selected' : ''}>Semakan</option>
+          </select>
+        </div>
+        <div class="edit-field full-span">
+          <label class="edit-label" for="edit-health">Masalah Kesihatan (jika ada)</label>
+          <input id="edit-health" name="healthDetails" class="edit-input" type="text" value="${member.health_details || member.health_issues || ''}" placeholder="Tiada atau nyatakan masalah kesihatan" />
+        </div>
+      </div>
+      <div id="edit-form-error" class="field-error" style="margin-bottom: 12px; color: #f87171;" hidden></div>
+      <div class="edit-modal-actions">
+        <button type="button" class="btn-secondary" data-close>Batal</button>
+        <button type="submit" class="btn-primary" id="save-edit-btn">Simpan Perubahan</button>
+      </div>
+    </form>
+  `;
+
+  const form = detail.querySelector('#edit-member-form');
+  const errorBox = detail.querySelector('#edit-form-error');
+
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    const saveBtn = form.querySelector('#save-edit-btn');
+    saveBtn.disabled = true;
+    saveBtn.textContent = 'Menyimpan...';
+    errorBox.hidden = true;
+
+    const fullName = form.querySelector('#edit-full-name').value.trim().toUpperCase();
+    const matricNumber = normalizeMatricNumber(form.querySelector('#edit-matric').value.trim());
+    const icNumber = form.querySelector('#edit-ic').value.trim();
+    const code = form.querySelector('#edit-program-code').value;
+    const sem = form.querySelector('#edit-semester').value;
+    const phone = form.querySelector('#edit-phone').value.trim();
+    const status = form.querySelector('#edit-status').value;
+    const healthDetails = form.querySelector('#edit-health').value.trim();
+
+    const updates = {
+      full_name: fullName,
+      matric_number: matricNumber,
+      member_id: matricNumber,
+      ic_number: icNumber,
+      program: formatProgramSemester(code, sem),
+      phone,
+      status,
+      health: healthDetails && healthDetails.toLowerCase() !== 'tiada' ? 'Ada' : 'Tiada',
+      health_details: healthDetails || 'Tiada',
+    };
+
+    const { error } = await updateMemberRecord(member.id, updates);
+    if (error) {
+      errorBox.textContent = error.message || 'Gagal menyimpan perubahan. Sila cuba lagi.';
+      errorBox.hidden = false;
+      saveBtn.disabled = false;
+      saveBtn.textContent = 'Simpan Perubahan';
+      return;
+    }
+
+    Object.assign(member, updates);
+    dialog.close();
+    if (typeof onUpdate === 'function') onUpdate();
+  });
+
+  dialog.showModal();
+}
+
+function openDeleteModal(member, dialog, onUpdate) {
+  const matric = member.matric_number || member.member_id || '—';
+  const detail = document.querySelector('#participant-detail');
+
+  // Step 1: First Confirmation
+  const renderStep1 = () => {
+    detail.innerHTML = `
+      <div class="dialog-head">
+        <div>
+          <p class="eyebrow" style="color: #f87171;">PENGESAHAN PADAM REKOD (LANGKAH 1 DARI 2)</p>
+          <h2 style="color: #fff;">Padam Rekod Peserta?</h2>
+        </div>
+        <button class="dialog-close" data-close type="button" aria-label="Tutup">×</button>
+      </div>
+      <div style="padding: 16px 0; color: #d4d4d8; font-size: 14px; line-height: 1.6;">
+        <p>Adakah anda pasti mahu memadam rekod peserta ini?</p>
+        <div style="background: rgba(239, 68, 68, 0.1); border-left: 3px solid #ef4444; padding: 12px 16px; margin: 14px 0; border-radius: 4px;">
+          <strong style="color: #fff; display: block; font-size: 15px;">${member.full_name}</strong>
+          <span style="font-family: monospace; color: #a1a1aa;">No. Matrik: ${matric} · Program: ${member.program || '—'}</span>
+        </div>
+        <p style="font-size: 13px; color: #a1a1aa;">Tindakan ini memerlukan pengesahan kali kedua sebelum rekod dipadam secara kekal.</p>
+      </div>
+      <div class="edit-modal-actions">
+        <button type="button" class="btn-secondary" data-close>Batal</button>
+        <button type="button" class="btn-danger" id="delete-step1-btn">Teruskan ke Pengesahan Akhir →</button>
+      </div>
+    `;
+
+    detail.querySelector('#delete-step1-btn')?.addEventListener('click', renderStep2);
+  };
+
+  // Step 2: Final Confirmation
+  const renderStep2 = () => {
+    detail.innerHTML = `
+      <div class="dialog-head">
+        <div>
+          <p class="eyebrow" style="color: #ef4444;">AMARAN TINDAKAN KEKAL (LANGKAH 2 DARI 2)</p>
+          <h2 style="color: #ef4444;">Pengesahan Akhir Padam</h2>
+        </div>
+        <button class="dialog-close" data-close type="button" aria-label="Tutup">×</button>
+      </div>
+      <div style="padding: 16px 0; color: #e4e4e7; font-size: 14px; line-height: 1.6;">
+        <p><strong style="color: #f87171;">PERHATIAN:</strong> Rekod atlet <strong>${member.full_name} (${matric})</strong> dan semua sejarah berkaitan akan dipadam sepenuhnya daripada pangkalan data Supabase rasmi.</p>
+        <p style="font-size: 13px; color: #a1a1aa; margin-top: 8px;">Tindakan ini tidak boleh diundur semula.</p>
+        <div id="delete-error-msg" class="field-error" style="margin-top: 10px; color: #f87171;" hidden></div>
+      </div>
+      <div class="edit-modal-actions">
+        <button type="button" class="btn-secondary" data-close>Batal</button>
+        <button type="button" class="btn-danger" id="delete-step2-btn" style="background: #dc2626; color: #fff;">PADAM REKOD SEKARANG</button>
+      </div>
+    `;
+
+    detail.querySelector('#delete-step2-btn')?.addEventListener('click', async e => {
+      const btn = e.target;
+      btn.disabled = true;
+      btn.textContent = 'Memadam...';
+      const errorMsg = detail.querySelector('#delete-error-msg');
+      errorMsg.hidden = true;
+
+      const { error } = await deleteMemberRecord(member.id);
+      if (error) {
+        errorMsg.textContent = error.message || 'Gagal memadam rekod. Sila cuba lagi.';
+        errorMsg.hidden = false;
+        btn.disabled = false;
+        btn.textContent = 'PADAM REKOD SEKARANG';
+        return;
+      }
+
+      dialog.close();
+      if (typeof onUpdate === 'function') onUpdate();
+    });
+  };
+
+  renderStep1();
+  dialog.showModal();
 }
 
 function openDetails(row, dialog, onUpdate) {

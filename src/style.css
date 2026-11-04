@@ -485,6 +485,111 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   box-shadow: 0 0 0 2px rgba(201, 8, 23, 0.25);
 }
 
+/* =========================================================
+   MEDAN 04 PROGRAM & SEMESTER SUBGRID & SELECT STYLES
+   ========================================================= */
+.program-semester-grid,
+.program-sem-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.field select {
+  display: block;
+  width: 100%;
+  height: 46px;
+  padding: 0 36px 0 14px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 6px;
+  background-color: rgba(8, 10, 16, 0.52);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: #fff;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23aaa7a4' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 14px 14px;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.35);
+  transition: border-color .15s ease, box-shadow .15s ease, background-color .15s ease;
+  color-scheme: dark;
+}
+
+.field select:invalid {
+  color: #7a7876;
+}
+
+.field select:hover {
+  border-color: rgba(255, 255, 255, 0.3);
+  background-color: rgba(12, 14, 22, 0.65);
+}
+
+.field select:focus {
+  outline: none;
+  border-color: rgba(229, 36, 47, 0.85);
+  box-shadow: 0 0 0 3px rgba(229, 36, 47, 0.25), inset 0 2px 4px rgba(0, 0, 0, 0.35);
+  background-color: rgba(14, 17, 26, 0.75);
+}
+
+.field select[aria-invalid="true"] {
+  border-color: var(--red);
+  box-shadow: 0 0 0 2px rgba(201, 8, 23, 0.25);
+}
+
+.field select option,
+select option {
+  background-color: #11141d;
+  color: #fff;
+  padding: 8px 12px;
+  font-size: 12px;
+}
+
+.field select option:disabled {
+  color: #7a7876;
+}
+
+/* Light Theme Compatibility */
+[data-theme="light"] .field select {
+  background-color: #ffffff;
+  border-color: #d1d5db;
+  color: #111827;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23374151' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  color-scheme: light;
+}
+
+[data-theme="light"] .field select:invalid {
+  color: #9ca3af;
+}
+
+[data-theme="light"] .field select:hover {
+  border-color: #9ca3af;
+  background-color: #f9fafb;
+}
+
+[data-theme="light"] .field select:focus {
+  border-color: var(--red);
+  box-shadow: 0 0 0 3px rgba(201, 8, 23, 0.15);
+  background-color: #ffffff;
+}
+
+[data-theme="light"] .field select option,
+[data-theme="light"] select option {
+  background-color: #ffffff;
+  color: #111827;
+}
+
+[data-theme="light"] .field select option:disabled {
+  color: #9ca3af;
+}
+
 .choice-field { border: 0; padding: 0; }
 .choice-field legend { padding: 0; }
 .field-number { color: #8f8d8a; font-size: 10px; margin-right: 3px; }
@@ -1454,6 +1559,11 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 }
 
 @media (max-width: 600px) {
+  .program-semester-grid,
+  .program-sem-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
   .topbar { height: 64px; padding: 0 16px; }
   .page-shell { width: calc(100% - 24px); margin: 20px auto 50px; }
   .hero-copy h1 { font-size: clamp(38px, 11vw, 54px); }
@@ -2110,4 +2220,183 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   width: 2px;
   height: 24px;
   background: linear-gradient(180deg, rgba(220, 38, 38, 0.6), rgba(220, 38, 38, 0.1));
+}
+
+/* ========================================================
+   ADMIN PARTICIPANT MANAGEMENT ACTIONS & EDIT MODAL
+   ======================================================== */
+.action-btns-group {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.action-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #d4d4d8;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.action-btn:hover {
+  transform: translateY(-2px);
+  color: #fff;
+}
+
+.action-btn-view:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.action-btn-edit {
+  color: #38bdf8;
+}
+.action-btn-edit:hover {
+  background: rgba(56, 189, 248, 0.2);
+  border-color: rgba(56, 189, 248, 0.5);
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
+}
+
+.action-btn-status:hover {
+  background: rgba(34, 197, 94, 0.2);
+  border-color: rgba(34, 197, 94, 0.5);
+  color: #4ade80;
+  box-shadow: 0 0 10px rgba(34, 197, 94, 0.3);
+}
+
+.action-btn-delete {
+  color: #f87171;
+}
+.action-btn-delete:hover {
+  background: rgba(239, 68, 68, 0.25);
+  border-color: rgba(239, 68, 68, 0.6);
+  color: #fff;
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.4);
+}
+
+.status-tag.rejected {
+  background: rgba(239, 68, 68, 0.2);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.5);
+}
+
+/* Edit Modal Form Controls */
+.edit-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin: 16px 0 20px;
+}
+
+@media (max-width: 600px) {
+  .edit-form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.edit-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.edit-field.full-span {
+  grid-column: 1 / -1;
+}
+
+.edit-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #a1a1aa;
+}
+
+.edit-input, .edit-select {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 8px;
+  padding: 8px 12px;
+  color: #fff;
+  font-size: 13px;
+  outline: none;
+  transition: all 0.2s;
+  width: 100%;
+}
+
+.edit-input:focus, .edit-select:focus {
+  border-color: rgba(56, 189, 248, 0.6);
+  background: rgba(255, 255, 255, 0.09);
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.25);
+}
+
+.edit-modal-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  gap: 12px;
+}
+
+.btn-danger {
+  background: rgba(239, 68, 68, 0.2);
+  border: 1px solid rgba(239, 68, 68, 0.5);
+  color: #f87171;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-danger:hover {
+  background: #dc2626;
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(220, 38, 38, 0.4);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #ef4444, #b91c1c);
+  border: none;
+  color: #fff;
+  padding: 8px 18px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.35);
+  transition: all 0.2s;
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(220, 38, 38, 0.5);
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #d4d4d8;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
 }
