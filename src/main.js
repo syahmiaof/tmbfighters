@@ -110,7 +110,7 @@ export async function registrationPage() {
               </div>
               <p style="margin: 0; font-size: 13.5px; color: #fff; font-weight: 700;">Isnin &amp; Rabu (9:00 – 11:00 Malam)</p>
               <p style="margin: 5px 0 0; font-size: 11.5px; color: #d4d4d8; line-height: 1.4;">
-                Latihan bermula semester depan di TVETMARA Besut. Di bawah naungan <strong>Pertubuhan Silat Seni Gayong Malaysia (PSSGM)</strong> bersama jurulatih bertauliah <strong>Coach Syahmi</strong>!
+                Latihan bermula semester depan di TVETMARA Besut.
               </p>
             </div>
             <div class="contact-header">
@@ -125,43 +125,13 @@ export async function registrationPage() {
               </div>
             </div>
             <div class="contact-list">
-              <a class="contact-item" href="https://wa.me/60139326767" target="_blank" rel="noopener noreferrer">
-                <span class="contact-wa-badge" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2m.01 1.67c4.54 0 8.24 3.7 8.24 8.24 0 2.2-.86 4.28-2.42 5.83a8.17 8.17 0 0 1-5.82 2.41c-1.42 0-2.82-.37-4.06-1.1l-.29-.17-3.02.79.81-2.94-.19-.3a8.19 8.19 0 0 1-1.26-4.47c0-4.54 3.7-8.24 8.24-8.24m-3.56 4.76c-.2 0-.51.07-.78.37-.27.29-1.02 1-1.02 2.43 0 1.44 1.05 2.82 1.2 3.01.15.2 2.05 3.14 4.98 4.4 2.43 1.05 2.92.84 3.45.79.53-.05 1.7-.69 1.94-1.36.24-.67.24-1.24.17-1.36-.07-.12-.27-.2-.56-.35-.3-.15-1.7-.84-1.97-.94-.26-.09-.46-.15-.65.15-.2.29-.76.94-.93 1.13-.17.2-.35.22-.64.07-.3-.15-1.26-.46-2.39-1.47-.88-.79-1.48-1.76-1.65-2.06-.17-.29-.02-.45.13-.6.13-.13.3-.35.44-.52.15-.17.2-.29.3-.49.09-.2.05-.37-.02-.52-.08-.15-.65-1.57-.9-2.15-.24-.56-.49-.49-.67-.5"/></svg>
-                </span>
-                <div class="contact-info">
-                  <span class="contact-name">Pn Azila</span>
-                  <span class="contact-phone">013-932 6767</span>
-                </div>
-                <span class="contact-arrow" aria-hidden="true">↗</span>
-              </a>
-              <a class="contact-item" href="https://wa.me/601110894945" target="_blank" rel="noopener noreferrer">
-                <span class="contact-wa-badge" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2m.01 1.67c4.54 0 8.24 3.7 8.24 8.24 0 2.2-.86 4.28-2.42 5.83a8.17 8.17 0 0 1-5.82 2.41c-1.42 0-2.82-.37-4.06-1.1l-.29-.17-3.02.79.81-2.94-.19-.3a8.19 8.19 0 0 1-1.26-4.47c0-4.54 3.7-8.24 8.24-8.24m-3.56 4.76c-.2 0-.51.07-.78.37-.27.29-1.02 1-1.02 2.43 0 1.44 1.05 2.82 1.2 3.01.15.2 2.05 3.14 4.98 4.4 2.43 1.05 2.92.84 3.45.79.53-.05 1.7-.69 1.94-1.36.24-.67.24-1.24.17-1.36-.07-.12-.27-.2-.56-.35-.3-.15-1.7-.84-1.97-.94-.26-.09-.46-.15-.65.15-.2.29-.76.94-.93 1.13-.17.2-.35.22-.64.07-.3-.15-1.26-.46-2.39-1.47-.88-.79-1.48-1.76-1.65-2.06-.17-.29-.02-.45.13-.6.13-.13.3-.35.44-.52.15-.17.2-.29.3-.49.09-.2.05-.37-.02-.52-.08-.15-.65-1.57-.9-2.15-.24-.56-.49-.49-.67-.5"/></svg>
-                </span>
-                <div class="contact-info">
-                  <span class="contact-name">En Fadhil</span>
-                  <span class="contact-phone">011-1089 4945</span>
-                </div>
-                <span class="contact-arrow" aria-hidden="true">↗</span>
-              </a>
               <a class="contact-item" href="https://wa.me/60107965236" target="_blank" rel="noopener noreferrer">
                 <span class="contact-wa-badge" aria-hidden="true">
                   <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2m.01 1.67c4.54 0 8.24 3.7 8.24 8.24 0 2.2-.86 4.28-2.42 5.83a8.17 8.17 0 0 1-5.82 2.41c-1.42 0-2.82-.37-4.06-1.1l-.29-.17-3.02.79.81-2.94-.19-.3a8.19 8.19 0 0 1-1.26-4.47c0-4.54 3.7-8.24 8.24-8.24m-3.56 4.76c-.2 0-.51.07-.78.37-.27.29-1.02 1-1.02 2.43 0 1.44 1.05 2.82 1.2 3.01.15.2 2.05 3.14 4.98 4.4 2.43 1.05 2.92.84 3.45.79.53-.05 1.7-.69 1.94-1.36.24-.67.24-1.24.17-1.36-.07-.12-.27-.2-.56-.35-.3-.15-1.7-.84-1.97-.94-.26-.09-.46-.15-.65.15-.2.29-.76.94-.93 1.13-.17.2-.35.22-.64.07-.3-.15-1.26-.46-2.39-1.47-.88-.79-1.48-1.76-1.65-2.06-.17-.29-.02-.45.13-.6.13-.13.3-.35.44-.52.15-.17.2-.29.3-.49.09-.2.05-.37-.02-.52-.08-.15-.65-1.57-.9-2.15-.24-.56-.49-.49-.67-.5"/></svg>
                 </span>
                 <div class="contact-info">
-                  <span class="contact-name">Coach Syahmi (Jurulatih Bertauliah)</span>
+                  <span class="contact-name">Syahmi</span>
                   <span class="contact-phone">010-796 5236</span>
-                </div>
-                <span class="contact-arrow" aria-hidden="true">↗</span>
-              </a>
-              <a class="contact-item" href="https://wa.me/601120812650" target="_blank" rel="noopener noreferrer">
-                <span class="contact-wa-badge" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2m.01 1.67c4.54 0 8.24 3.7 8.24 8.24 0 2.2-.86 4.28-2.42 5.83a8.17 8.17 0 0 1-5.82 2.41c-1.42 0-2.82-.37-4.06-1.1l-.29-.17-3.02.79.81-2.94-.19-.3a8.19 8.19 0 0 1-1.26-4.47c0-4.54 3.7-8.24 8.24-8.24m-3.56 4.76c-.2 0-.51.07-.78.37-.27.29-1.02 1-1.02 2.43 0 1.44 1.05 2.82 1.2 3.01.15.2 2.05 3.14 4.98 4.4 2.43 1.05 2.92.84 3.45.79.53-.05 1.7-.69 1.94-1.36.24-.67.24-1.24.17-1.36-.07-.12-.27-.2-.56-.35-.3-.15-1.7-.84-1.97-.94-.26-.09-.46-.15-.65.15-.2.29-.76.94-.93 1.13-.17.2-.35.22-.64.07-.3-.15-1.26-.46-2.39-1.47-.88-.79-1.48-1.76-1.65-2.06-.17-.29-.02-.45.13-.6.13-.13.3-.35.44-.52.15-.17.2-.29.3-.49.09-.2.05-.37-.02-.52-.08-.15-.65-1.57-.9-2.15-.24-.56-.49-.49-.67-.5"/></svg>
-                </span>
-                <div class="contact-info">
-                  <span class="contact-name">Hud</span>
-                  <span class="contact-phone">011-2081 2650</span>
                 </div>
                 <span class="contact-arrow" aria-hidden="true">↗</span>
               </a>
@@ -206,6 +176,8 @@ export async function registrationPage() {
                   <option value="DGA">DGA</option>
                   <option value="ITW">ITW</option>
                   <option value="SLR">SLR</option>
+                  <option value="PPU">PPU</option>
+                  <option value="DCG">DCG</option>
                 </select>
                 <select id="semester" name="semester" aria-label="Semester Pengajian" required>
                   <option value="" disabled selected>Pilih Semester</option>
@@ -345,7 +317,7 @@ export async function registrationPage() {
             name: m.full_name,
             program: m.program,
             registeredAt: m.created_at ? m.created_at.split('T')[0] : '2026-11-04',
-            status: m.status || 'Diterima',
+            status: m.status || 'Semakan',
           }))
         : [];
 
@@ -401,6 +373,7 @@ function setupTracker(records) {
             }).format(new Date(`${item.registeredAt}T00:00:00`))
           : '04 Nov 2026';
 
+          const isApproved = item.status === 'Diterima' || item.status === 'Aktif';
         return `
         <tr>
           <td class="tracker-num">${String(idx + 1).padStart(2, '0')}</td>
@@ -417,9 +390,9 @@ function setupTracker(records) {
           </td>
           <td class="tracker-date">${formattedDate}</td>
           <td style="text-align: right;">
-            <span class="tracker-status-badge ${item.status === 'Semakan' ? 'review' : 'accepted'}">
+            <span class="tracker-status-badge ${isApproved ? 'accepted' : 'review'}">
               <span class="tracker-badge-dot"></span>
-              ${item.status === 'Semakan' ? 'Dalam Semakan' : 'Disahkan'}
+              ${isApproved ? 'Disahkan' : 'Dalam Semakan'}
             </span>
           </td>
         </tr>
@@ -1140,6 +1113,8 @@ async function adminPage(session) {
               <option value="DGA">DGA</option>
               <option value="ITW">ITW</option>
               <option value="SLR">SLR</option>
+              <option value="PPU">PPU</option>
+              <option value="DCG">DCG</option>
             </select>
           </label>
           <label class="filter-select">
@@ -1429,6 +1404,8 @@ function openEditModal(member, dialog, onUpdate) {
             <option value="DGA" ${currentCode === 'DGA' ? 'selected' : ''}>DGA</option>
             <option value="ITW" ${currentCode === 'ITW' ? 'selected' : ''}>ITW</option>
             <option value="SLR" ${currentCode === 'SLR' ? 'selected' : ''}>SLR</option>
+            <option value="PPU" ${currentCode === 'PPU' ? 'selected' : ''}>PPU</option>
+            <option value="DCG" ${currentCode === 'DCG' ? 'selected' : ''}>DCG</option>
           </select>
         </div>
         <div class="edit-field">
@@ -2048,6 +2025,15 @@ document.addEventListener('click', e => {
   if (link && !link.target && !link.hasAttribute('download')) {
     const href = link.getAttribute('href');
     if (href.startsWith('/#')) {
+      if (document.querySelector('.success-page')) {
+        e.preventDefault();
+        history.replaceState(null, '', href);
+        registrationPage().then(() => {
+          const targetEl = document.querySelector(href.substring(1));
+          if (targetEl) targetEl.scrollIntoView({ behavior: 'smooth' });
+        });
+        return;
+      }
       if (window.location.pathname === '/') return;
     }
     if (href.startsWith('/') && !href.startsWith('//')) {

@@ -101,7 +101,7 @@ async function runTest(tierKey, name, fn) {
 // REFERENCE SPECIFICATIONS & ORACLE MODELS (PROJECT.md Interface Contracts)
 // ==============================================================================
 
-export const AUTHORITATIVE_COURSES = ['DFK', 'DGA', 'ITW', 'SLR'];
+export const AUTHORITATIVE_COURSES = ['DFK', 'DGA', 'ITW', 'SLR', 'PPU', 'DCG'];
 export const AUTHORITATIVE_SEMESTERS = ['Sem 1', 'Sem 2', 'Sem 3', 'Sem 4', 'Sem 5'];
 
 /**
@@ -134,7 +134,7 @@ export function referenceParseProgramDetails(programStr) {
   }
 
   // Find course code
-  const codeMatch = raw.match(/\b(DFK|DGA|ITW|SLR)\b/i);
+  const codeMatch = raw.match(/\b(DFK|DGA|ITW|SLR|PPU|DCG)\b/i);
   const code = codeMatch ? codeMatch[1].toUpperCase() : '';
 
   // Find semester number
@@ -246,7 +246,7 @@ if (!targetTier || targetTier === 1) {
   // Test 1.1: Standardized Program Dropdown (R1 / Feature 1)
   await runTest('tier1', '1.1 Program Dropdown: Offers short course codes only without descriptions', async () => {
     // 1. Contract / Reference model check
-    assert.deepStrictEqual(AUTHORITATIVE_COURSES, ['DFK', 'DGA', 'ITW', 'SLR'], 'Authoritative course codes must be DFK, DGA, ITW, SLR');
+    assert.deepStrictEqual(AUTHORITATIVE_COURSES, ['DFK', 'DGA', 'ITW', 'SLR', 'PPU', 'DCG'], 'Authoritative course codes must be DFK, DGA, ITW, SLR, PPU, DCG');
     for (const code of AUTHORITATIVE_COURSES) {
       assert.strictEqual(code.length <= 4, true, `Code ${code} must be a short code without description`);
       assert.strictEqual(/^[A-Z]{3,4}$/.test(code), true, `Code ${code} must be uppercase alphanumeric`);
@@ -259,11 +259,13 @@ if (!targetTier || targetTier === 1) {
         mainJsSource.includes('value="DFK"') &&
         mainJsSource.includes('value="DGA"') &&
         mainJsSource.includes('value="ITW"') &&
-        mainJsSource.includes('value="SLR"');
+        mainJsSource.includes('value="SLR"') &&
+        mainJsSource.includes('value="PPU"') &&
+        mainJsSource.includes('value="DCG"');
 
       if (!hasProgramSelect) {
         throw new Error(
-          'Implementation Gap (M1): src/main.js registration form must replace Medan 04 input with <select id="program"> offering short codes DFK, DGA, ITW, SLR without descriptions.'
+          'Implementation Gap (M1): src/main.js registration form must replace Medan 04 input with <select id="program"> offering short codes DFK, DGA, ITW, SLR, PPU, DCG without descriptions.'
         );
       }
     }
@@ -338,20 +340,26 @@ if (!targetTier || targetTier === 1) {
   });
 
   // Test 1.5: Course Code Filter Dropdown (R2 / Feature 5)
-  await runTest('tier1', '1.5 Admin Filter: Course code filter displays short codes only (Semua kod, DFK, DGA, ITW, SLR)', async () => {
+  await runTest('tier1', '1.5 Admin Filter: Course code filter displays short codes only (Semua kod, DFK, DGA, ITW, SLR, PPU, DCG)', async () => {
     const sampleMembers = [
       { id: 1, full_name: 'Athlete A', program: 'DFK Sem 1' },
       { id: 2, full_name: 'Athlete B', program: 'DGA Sem 2' },
       { id: 3, full_name: 'Athlete C', program: 'ITW Sem 3' },
       { id: 4, full_name: 'Athlete D', program: 'SLR Sem 4' },
+      { id: 5, full_name: 'Athlete E', program: 'PPU Sem 1' },
+      { id: 6, full_name: 'Athlete F', program: 'DCG Sem 2' },
     ];
 
     const filteredDFK = referenceFilterMembers(sampleMembers, { course: 'DFK' });
     assert.strictEqual(filteredDFK.length, 1);
     assert.strictEqual(filteredDFK[0].id, 1);
 
+    const filteredPPU = referenceFilterMembers(sampleMembers, { course: 'PPU' });
+    assert.strictEqual(filteredPPU.length, 1);
+    assert.strictEqual(filteredPPU[0].id, 5);
+
     const filteredAll = referenceFilterMembers(sampleMembers, { course: 'Semua kod' });
-    assert.strictEqual(filteredAll.length, 4);
+    assert.strictEqual(filteredAll.length, 6);
 
     if (!isMock) {
       const hasCourseFilter =
@@ -360,7 +368,9 @@ if (!targetTier || targetTier === 1) {
         mainJsSource.includes('DFK') &&
         mainJsSource.includes('DGA') &&
         mainJsSource.includes('ITW') &&
-        mainJsSource.includes('SLR');
+        mainJsSource.includes('SLR') &&
+        mainJsSource.includes('PPU') &&
+        mainJsSource.includes('DCG');
 
       if (!hasCourseFilter || !hasShortCodes) {
         throw new Error('Implementation Gap (M2): Admin dashboard must render course code filter with short codes.');
@@ -942,7 +952,7 @@ if (!targetTier || targetTier === 4) {
   await runTest('tier4', '4.2 E2E Journey B: Admin audits 30 legacy records with mixed formats -> Filters by course code -> Standardizes via Edit modal', async () => {
     // Generate 30 mock members with mixed legacy strings
     const legacyRecords = [];
-    const courses = ['DFK', 'DGA', 'ITW', 'SLR'];
+    const courses = ['DFK', 'DGA', 'ITW', 'SLR', 'PPU', 'DCG'];
     for (let i = 1; i <= 30; i++) {
       const c = courses[i % courses.length];
       const s = (i % 5) + 1;
@@ -973,7 +983,7 @@ if (!targetTier || targetTier === 4) {
     });
 
     // Verify all 30 records now match the uniform regex
-    const regex = /^(DFK|DGA|ITW|SLR) Sem [1-5]$/;
+    const regex = /^(DFK|DGA|ITW|SLR|PPU|DCG) Sem [1-5]$/;
     for (const r of standardizedRecords) {
       assert.strictEqual(regex.test(r.program), true, `Record ${r.id} (${r.program}) must match uniform standard`);
     }

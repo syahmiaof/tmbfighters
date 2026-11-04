@@ -367,11 +367,12 @@ assert(
   'Homepage clearly states commencement: Latihan bermula semester depan'
 );
 
-// Certified Coach: Coach Syahmi (Jurulatih Bertauliah)
+// Contact person on Homepage: Syahmi only (per latest user directive)
 assert(
-  mainJsSource.includes('Coach Syahmi (Jurulatih Bertauliah)') &&
-  mainJsSource.includes('Muhammad Syahmi bin Ahmad Omar Faizul'),
-  'Homepage explicitly names Coach Syahmi as certified coach (Jurulatih Bertauliah)'
+  mainJsSource.includes('<span class="contact-name">Syahmi</span>') &&
+  mainJsSource.includes('010-796 5236') &&
+  !mainJsSource.includes('<span class="contact-name">Pn Azila</span>'),
+  'Homepage contact list displays Syahmi only per latest user directive'
 );
 
 // Official affiliations: PSSGM and MPP TVETMARA Besut

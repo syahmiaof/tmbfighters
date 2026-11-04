@@ -238,7 +238,7 @@ export async function getPublicRegisteredMembers() {
   try {
     const { data, error } = await supabase
       .from('public_registered_members')
-      .select('id, full_name, program, created_at')
+      .select('id, full_name, program, status, created_at')
       .order('created_at', { ascending: false });
 
     if (error) {
