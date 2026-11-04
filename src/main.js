@@ -91,11 +91,9 @@ export async function registrationPage() {
             <div class="chips">
               <span>Silat Seni</span>
               <span>Silat Olahraga</span>
-              <span>RM10 sebulan</span>
-              <span>Isnin &amp; Rabu (9:00 - 11:00 Malam)</span>
-              <span>Latihan Bermula Sem Depan</span>
+              <span>Yuran RM10 sebulan</span>
               <span>Jurulatih Bertauliah: Coach Syahmi</span>
-              <span>Naungan Rasmi: PSSGM</span>
+              <span>Pertubuhan Silat Seni Gayong Malaysia</span>
               <span>Sasaran 30 peserta (Pendaftaran Terbuka)</span>
             </div>
             <p class="intro">Disini tempat untuk kita bina disiplin dan asah keberanian. Isi borang di bawah untuk bersama TMB Fighters.</p>

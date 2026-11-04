@@ -231,9 +231,9 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(10px);
   padding: 6px 12px;
-  border-radius: 4px;
-  font-size: 10px;
-  line-height: 1;
+  border-radius: 6px;
+  font-size: 11px;
+  line-height: 1.2;
   color: #e4e1de;
   font-weight: 700;
   letter-spacing: .02em;
