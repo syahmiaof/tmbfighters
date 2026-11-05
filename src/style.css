@@ -1452,10 +1452,10 @@ select option {
 .search-field input { width: 100%; height: 38px; padding-left: 32px; border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 5px; background: rgba(8, 10, 16, 0.52); color: #fff; font-size: 11px; }
 .filter-select select { height: 38px; padding: 0 12px; border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 5px; background: rgba(8, 10, 16, 0.52); color: #dfdcda; font-size: 11px; }
 
-.table-wrap { overflow-x: auto; }
-.table-wrap table { width: 100%; min-width: 880px; border-collapse: collapse; text-align: left; }
-.table-wrap th { height: 40px; padding: 0 16px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); color: #aaa7a4; font-size: 9px; font-weight: 800; text-transform: uppercase; white-space: nowrap; }
-.table-wrap td { height: 50px; padding: 0 16px; border-top: 1px solid rgba(255, 255, 255, 0.06); color: #f1f0ee; font-size: 11px; }
+.table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.table-wrap table { width: 100%; min-width: 1240px; border-collapse: collapse; text-align: left; }
+.table-wrap th { height: 42px; padding: 0 16px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); color: #aaa7a4; font-size: 9px; font-weight: 800; text-transform: uppercase; white-space: nowrap; }
+.table-wrap td { height: 50px; padding: 0 16px; border-top: 1px solid rgba(255, 255, 255, 0.06); color: #f1f0ee; font-size: 11px; vertical-align: middle; }
 .participant-link { display: inline-flex; align-items: center; gap: 10px; background: transparent; border: 0; color: inherit; padding: 0; cursor: pointer; text-align: left; }
 .participant-link .avatar { width: 28px; height: 28px; border-radius: 50%; background: rgba(217, 28, 40, 0.2); border: 1px solid rgba(217, 28, 40, 0.45); color: #ffadb4; display: grid; place-items: center; font-size: 9px; font-weight: 800; }
 .participant-link strong { display: block; font-size: 12px; color: #fff; }
@@ -2321,12 +2321,25 @@ select option {
   box-shadow: 0 0 10px rgba(239, 68, 68, 0.35);
 }
 
+.col-email,
+.table-wrap td.col-email {
+  min-width: 180px;
+  max-width: 220px;
+  white-space: nowrap;
+}
+
 .table-email-link {
   color: #94a3b8;
   text-decoration: none;
-  font-size: 12px;
+  font-size: 11px;
+  font-family: inherit;
   transition: color 0.2s;
-  word-break: break-all;
+  white-space: nowrap;
+  display: inline-block;
+  max-width: 210px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: middle;
 }
 .table-email-link:hover {
   color: #f8fafc;

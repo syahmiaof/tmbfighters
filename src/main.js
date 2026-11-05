@@ -1207,7 +1207,7 @@ async function adminPage(session) {
                 <th>No. Matrik</th>
                 <th>No. IC</th>
                 <th>Program</th>
-                <th>Email</th>
+                <th class="col-email">Email</th>
                 <th>Jantina</th>
                 <th>Pengalaman</th>
                 <th>Kesihatan</th>
@@ -1364,7 +1364,7 @@ async function adminPage(session) {
           <td><span style="font-family: monospace; font-weight: 700;">${matric}</span></td>
           <td><span style="font-family: monospace; color: #bbb;">${row.ic_number || '—'}</span></td>
           <td>${row.program || '—'}</td>
-          <td><a class="table-email-link" href="mailto:${row.email || ''}" title="${row.email || 'Tiada email'}">${row.email || '—'}</a></td>
+          <td class="col-email"><a class="table-email-link" href="mailto:${row.email || ''}" title="${row.email || 'Tiada email'}">${row.email || '—'}</a></td>
           <td>${row.gender || '—'}</td>
           <td><span class="experience-tag ${row.experience === 'Ada' ? 'yes' : ''}">${row.experience || '—'}</span></td>
           <td>
