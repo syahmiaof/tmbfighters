@@ -39,6 +39,11 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+    <!-- Preload critical above-the-fold brand mark & hero banner for instant mobile loading -->
+    <link rel="preload" as="image" href="/tmb-mark.webp" type="image/webp" fetchpriority="high" />
+    <link rel="preload" as="image" href="/tmb-banner-mobile.webp" type="image/webp" media="(max-width: 768px)" fetchpriority="high" />
+    <link rel="preload" as="image" href="/tmb-banner.webp" type="image/webp" media="(min-width: 769px)" fetchpriority="high" />
   </head>
   <body>
     <div id="bg-fixed-layer" class="bg-fixed-layer" aria-hidden="true"></div>

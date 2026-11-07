@@ -47,7 +47,10 @@ export function whatsappUrl(phone) {
 export function brandHeader(activePage = 'home') {
   return `<header class="topbar">
     <a class="brand" href="/" aria-label="TMB Fighters — Homepage">
-      <img src="${logo}" alt="TMB Fighters Mark" />
+      <picture>
+        <source srcset="/tmb-mark.webp" type="image/webp" />
+        <img src="${logo}" alt="TMB Fighters Mark" width="40" height="40" loading="eager" fetchpriority="high" />
+      </picture>
       <span>TMB <b>FIGHTERS</b></span>
     </a>
     <nav aria-label="Navigasi utama">
@@ -76,7 +79,11 @@ export async function registrationPage() {
     <main class="page-shell">
       <!-- HERO SECTION -->
       <section class="hero-panel">
-        <img class="hero-banner" src="${banner}" alt="Kelab Pencak Silat TVETMARA Besut — TMB Fighters" />
+        <picture class="hero-banner-picture">
+          <source media="(max-width: 768px)" srcset="/tmb-banner-mobile.webp" type="image/webp" />
+          <source srcset="/tmb-banner.webp" type="image/webp" />
+          <img class="hero-banner" src="${banner}" alt="Kelab Pencak Silat TVETMARA Besut — TMB Fighters" width="2172" height="520" loading="eager" fetchpriority="high" />
+        </picture>
         <div class="hero-layout">
           <div class="hero-copy">
             <div class="eyebrow"><span></span> AYUH SERTAI KAMI</div>
